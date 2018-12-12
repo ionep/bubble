@@ -26,19 +26,32 @@
     <?php if(Auth::user()){ ?>
     <script>
         $(document).ready(function(){
-            
-            var data=<?php if(isset($data)){echo json_encode($data);} ?>; //maybe check if null is returned
-            var labels=<?php if(isset($date)){echo json_encode($date);} ?>;
+
+            var dayData=<?php if(isset($dayData)){echo json_encode($dayData);} ?>; //maybe check if null is returned
+            var dayLabel=<?php if(isset($day)){echo json_encode($day);} ?>;
+
+
+            var monthData=<?php if(isset($monthData)){echo json_encode($monthData);} ?>; 
+            var monthNumber=<?php if(isset($month)){echo json_encode($month);} ?>;
+
+            //month to name converter
+            var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var monthLabel=new Array();
+            for(i=0;i<monthNumber.length;i++){
+                monthLabel[i]=months[monthNumber[i]-1];
+                console.log(monthLabel[i]);
+            }
+
             var chartOverallElement = document.getElementById('chartOverall').getContext('2d');
             var chart = new Chart(chartOverallElement, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: monthLabel,
                     datasets: [{
                         label: "No label",
                         backgroundColor: 'transparent',
                         borderColor: 'rgb(40, 205, 243)',
-                        data: data,
+                        data: monthData,
                         pointBackgroundColor: [],
                     }]
                 },
@@ -59,7 +72,7 @@
                         yAxes: [{  
                             ticks: {
                             beginAtZero: true,
-                            stepSize: 0.5
+                            stepSize: 5
                             }
                         }],
                         xAxes: [{
@@ -76,12 +89,12 @@
             var radarChart=new Chart(radarChartElement,{
                 type: 'radar',
                 data: {
-                    labels: labels,
+                    labels: dayLabel,
                     datasets: [{
                         label: "No label",
                         backgroundColor: 'transparent',
                         borderColor: 'rgb(40, 205, 243)',
-                        data: data,
+                        data: dayData,
                         pointBackgroundColor: [],
                     }]
                 },
@@ -104,12 +117,12 @@
             var smallChart = new Chart(smallChartElement, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: dayLabel,
                     datasets: [{
                         label: "No label",
                         backgroundColor: '',
                         borderColor: 'rgb(40, 205, 243)',
-                        data: data,
+                        data: dayData,
                         pointBackgroundColor: [],
                     }]
                 },
@@ -147,12 +160,12 @@
             var barChart = new Chart(barChartElement, {
                 type: 'bar',
                 data: {
-                    labels: labels,
+                    labels: monthLabel,
                     datasets: [{
                         label: "No label",
                         backgroundColor: 'rgb(40, 205, 243)',
                         borderColor: 'rgb(40, 205, 243)',
-                        data: data,
+                        data: monthData,
                         pointBackgroundColor: [],
                     }]
                 },
@@ -188,13 +201,20 @@
             document.getElementById('chartOverall').height="10px";
 
             var i;
-            for(i=0;i<=data.length;i++)
+            for(i=0;i<=dayData.length;i++)
+            {
+                smallChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+                radarChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+            }
+            for(i in monthData)
             {
                 chart.data.datasets[0].pointBackgroundColor[i] = "#000000";
-                radarChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+                barChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
             }
             chart.update();
             radarChart.update();
+            smallChart.update();
+            barChart.update();
         });
         
     </script>

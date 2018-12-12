@@ -21,13 +21,23 @@
             <span class="col-md-1"></span>
         </div>
         <?php
-            if (count($consume)>0){
-                $date=[];
-                $data=[];
+            if (count($daily)>0){
+                $day=[];
+                $dayData=[];
                 $i=0;
-                foreach ($consume as $c){
-                    $date[$i]=$c['day'];
-                    $data[$i]=$c['consumption'];
+                foreach ($daily as $d){
+                    $day[$i]=$d['day'];
+                    $dayData[$i]=$d['consumption'];
+                    $i++;
+                }
+            }
+            if (count($monthly)>0){
+                $month=[];
+                $monthData=[];
+                $i=0;
+                foreach ($monthly as $m){
+                    $month[$i]=$m['month'];
+                    $monthData[$i]=$m['consumption'];
                     $i++;
                 }
             }
