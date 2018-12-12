@@ -1,21 +1,27 @@
+body{
+    overflow-x: hidden;
+    padding-right: 4%;
+}
+//sidenav configuration
 .sidenav {
     height: 100%;
-    width: 200px;
+    width: 250px;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
     background-color: #28cdf3;
-    color: red;
+    color: white;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding: 20px 5px 5px 5px;
     margin-right:5px;
 }
-
+.sidenav h2{
+    font-size: 20px;
+}
 .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 25px;
     color: white;
     display: block;
 }
@@ -31,13 +37,55 @@
     .sidenav a {font-size: 18px;}
 }
 
+//make sure that sidenav and charts donot overlap
+#main{
+    margin-left:260px;
+    background: white;  
+}
+
+#main span p{
+    font-weight: 1000;
+    margin: 15px 5px 10px 5px;
+}
+
+//make search bar better
 .search-bar{
-    position: absolute;
-    right: 0px;
+    margin: 5px 5px 10px 5px;
 }
 
 .search-bar .form-control{
     border-radius:10px;
     background: #28cdf3;
     color: black;
+}
+.search-bar i{
+    color:white;
+}
+
+//color of placeholders
+input::-webkit-input-placeholder {
+    color: white !important;
+}
+    
+input:-moz-placeholder { /* Firefox 18- */
+    color: white !important;  
+}
+    
+input::-moz-placeholder {  /* Firefox 19+ */
+    color: white !important;  
+}
+    
+input:-ms-input-placeholder {  
+    color: white !important;  
+}
+
+
+//chart highlight
+.card{
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 20px #9ecaed;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
 }

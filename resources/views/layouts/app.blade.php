@@ -23,23 +23,181 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <?php if(Auth::user()){ ?>
     <script>
-        var data=<?php if(isset($data)){echo json_encode($data);} ?>;
-        var labels=<?php if(isset($date)){echo json_encode($date);} ?>;
-        var chartOverallElement = document.getElementById('chartOverall').getContext('2d');
-        var chart = new Chart(chartOverallElement, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "Overall data",
-                    backgroundColor: 'transparent',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: data,
-                }]  
-            },
-            options: {}
+        $(document).ready(function(){
+            
+            var data=<?php if(isset($data)){echo json_encode($data);} ?>; //maybe check if null is returned
+            var labels=<?php if(isset($date)){echo json_encode($date);} ?>;
+            var chartOverallElement = document.getElementById('chartOverall').getContext('2d');
+            var chart = new Chart(chartOverallElement, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "No label",
+                        backgroundColor: 'transparent',
+                        borderColor: 'rgb(40, 205, 243)',
+                        data: data,
+                        pointBackgroundColor: [],
+                    }]
+                },
+                options: {
+                    // remove label
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                    return tooltipItem.yLabel;
+                            }
+                        }
+                    },
+                    //y-axis scale
+                    scales: {
+                        yAxes: [{  
+                            ticks: {
+                            beginAtZero: true,
+                            stepSize: 0.5
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                color: "rgba(0, 0, 0, 0)",
+                            },
+                        }]
+                    }
+                }
+            });
+
+            //radar chart
+            var radarChartElement=document.getElementById('radarChart').getContext('2d');
+            var radarChart=new Chart(radarChartElement,{
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "No label",
+                        backgroundColor: 'transparent',
+                        borderColor: 'rgb(40, 205, 243)',
+                        data: data,
+                        pointBackgroundColor: [],
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                    return tooltipItem.yLabel;
+                            }
+                        }
+                    },
+                }
+            });
+
+            //small line chart
+            var smallChartElement = document.getElementById('smallLineChart').getContext('2d');
+            var smallChart = new Chart(smallChartElement, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "No label",
+                        backgroundColor: '',
+                        borderColor: 'rgb(40, 205, 243)',
+                        data: data,
+                        pointBackgroundColor: [],
+                    }]
+                },
+                options: {
+                    // remove label
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                    return tooltipItem.yLabel;
+                            }
+                        }
+                    },
+                    //y-axis scale
+                    scales: {
+                        yAxes: [{  
+                            ticks: {
+                            beginAtZero: true,
+                            stepSize: 2
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                color: "rgba(0, 0, 0, 0)",
+                            }
+                        }]
+                    }
+                }
+            });
+
+            //bar chart
+            var barChartElement = document.getElementById('barChart').getContext('2d');
+            var barChart = new Chart(barChartElement, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "No label",
+                        backgroundColor: 'rgb(40, 205, 243)',
+                        borderColor: 'rgb(40, 205, 243)',
+                        data: data,
+                        pointBackgroundColor: [],
+                    }]
+                },
+                options: {
+                    // remove label
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                    return tooltipItem.yLabel;
+                            }
+                        }
+                    },
+                    //y-axis scale
+                    scales: {
+                        yAxes: [{  
+                            ticks: {
+                            beginAtZero: true,
+                            stepSize: 2
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                color: "rgba(0, 0, 0, 0)",
+                            }
+                        }]
+                    }
+                }
+            });
+
+            document.getElementById('chartOverall').height="10px";
+
+            var i;
+            for(i=0;i<=data.length;i++)
+            {
+                chart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+                radarChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+            }
+            chart.update();
+            radarChart.update();
         });
+        
     </script>
+    <?php } ?>
 </body>
 </html>
