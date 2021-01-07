@@ -25,22 +25,78 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <?php if(Auth::user()){ ?>
     <script>
+        function getMinMax(arr) {
+            let min = arr[0];
+            let max = arr[0];
+            let i = arr.length;
+
+            while (i--) {
+                min = arr[i] < min ? arr[i] : min;
+                max = arr[i] > max ? arr[i] : max;
+            }
+            return { min, max };
+        }
         $(document).ready(function(){
-
-            var dayData=<?php if(isset($dayData)){echo json_encode($dayData);} ?>; //maybe check if null is returned
-            var dayLabel=<?php if(isset($day)){echo json_encode($day);} ?>;
-
-
-            var monthData=<?php if(isset($monthData)){echo json_encode($monthData);} ?>; 
-            var monthNumber=<?php if(isset($month)){echo json_encode($month);} ?>;
+            <?php 
+            if(isset($dayData) && isset($day)){ 
+            ?>
+                var dayData=<?php echo json_encode($dayData); ?>; //maybe check if null is returned
+                var dayLabel=<?php echo json_encode($day); ?>;
+                var minMax=getMinMax(dayData);
+                var dayStep=Math.ceil((minMax['max']-minMax['min'])/dayData.length);
+            <?php 
+            } 
+            else{
+            ?>
+                var dayData=['0'];
+                var dayLabel=['0'];
+                var dayStep=1;
+            <?php
+            }
+            ?>
+            
+            <?php 
+            if(isset($monthData) && isset($month)){ 
+            ?>
+                var monthData=<?php echo json_encode($monthData); ?>; 
+                var monthLabel=<?php echo json_encode($month); ?>;
+                var minMax=getMinMax(monthData);
+                var monthStep=Math.ceil((minMax['max']-minMax['min'])/monthData.length);
+            <?php 
+            } 
+            else{
+            ?>
+                var monthData=['0'];
+                var monthLabel=['0'];
+                var monthStep=1;
+            <?php
+            }
+            ?>
+            
+            <?php 
+            if(isset($yearData) && isset($year)){ 
+            ?>
+                var yearData=<?php echo json_encode($yearData); ?>; 
+                var yearLabel=<?php echo json_encode($year); ?>;
+                var minMax=getMinMax(yearData);
+                var yearStep=Math.ceil((minMax['max']-minMax['min'])/yearData.length);
+                <?php 
+            } 
+            else{
+            ?>
+                var yearData=['0'];
+                var yearLabel=['0'];
+                var yearStep=1;
+            <?php
+            }
+            ?>
 
             //month to name converter
-            var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            var monthLabel=new Array();
-            for(i=0;i<monthNumber.length;i++){
-                monthLabel[i]=months[monthNumber[i]-1];
-                console.log(monthLabel[i]);
-            }
+            // var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            // var monthLabel=new Array();
+            // for(i=0;i<monthNumber.length;i++){
+            //     monthLabel[i]=months[monthNumber[i]-1];
+            // }
 
             var chartOverallElement = document.getElementById('chartOverall').getContext('2d');
             var chart = new Chart(chartOverallElement, {
@@ -72,7 +128,7 @@
                         yAxes: [{  
                             ticks: {
                             beginAtZero: true,
-                            stepSize: 5
+                            stepSize: monthStep
                             }
                         }],
                         xAxes: [{
@@ -89,12 +145,12 @@
             var radarChart=new Chart(radarChartElement,{
                 type: 'radar',
                 data: {
-                    labels: dayLabel,
+                    labels: monthLabel,
                     datasets: [{
                         label: "No label",
                         backgroundColor: 'transparent',
                         borderColor: 'rgb(40, 205, 243)',
-                        data: dayData,
+                        data: monthData,
                         pointBackgroundColor: [],
                     }]
                 },
@@ -143,7 +199,7 @@
                         yAxes: [{  
                             ticks: {
                             beginAtZero: true,
-                            stepSize: 2
+                            stepSize: dayStep
                             }
                         }],
                         xAxes: [{
@@ -160,12 +216,12 @@
             var barChart = new Chart(barChartElement, {
                 type: 'bar',
                 data: {
-                    labels: monthLabel,
+                    labels: yearLabel,
                     datasets: [{
                         label: "No label",
                         backgroundColor: 'rgb(40, 205, 243)',
                         borderColor: 'rgb(40, 205, 243)',
-                        data: monthData,
+                        data: yearData,
                         pointBackgroundColor: [],
                     }]
                 },
@@ -186,7 +242,7 @@
                         yAxes: [{  
                             ticks: {
                             beginAtZero: true,
-                            stepSize: 2
+                            stepSize: yearStep
                             }
                         }],
                         xAxes: [{
@@ -204,11 +260,14 @@
             for(i=0;i<=dayData.length;i++)
             {
                 smallChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
-                radarChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
             }
             for(i in monthData)
             {
                 chart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+                radarChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
+            }
+            for(i in yearData)
+            {
                 barChart.data.datasets[0].pointBackgroundColor[i] = "#000000";
             }
             chart.update();

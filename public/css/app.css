@@ -8448,3 +8448,7 @@ input:-ms-input-placeholder {
   padding: 10px;
 }
 
+.table-responsive {
+  margin: 10px 30px 30px 30px;
+}
+

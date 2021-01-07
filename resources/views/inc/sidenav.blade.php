@@ -1,4 +1,5 @@
 <div class="sidenav" id="sidenav">
+	<img src={{url('/photos/logo.png')}}  style="width:240px;height:auto;margin-top:10px;margin-bottom:10px;">
     <h2 class="text-center">WATER CONSUMPTION MONITORING</h2>
     <hr>
     <a href="/dashboard">
